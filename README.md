@@ -10,22 +10,21 @@
 
 1. [Overview](#overview)
 2. [Features](#features)
-3. [Components & Bill of Materials](#components--bill-of-materials)
-4. [Circuit Diagram](#circuit-diagram)
-5. [Chassis Construction](#chassis-construction)
-6. [Wiring Guide](#wiring-guide)
-7. [Arduino Code](#arduino-code)
-8. [Bluetooth App Setup](#bluetooth-app-setup)
-9. [Command Reference](#command-reference)
-10. [How It Works](#how-it-works)
-11. [Photos](#photos)
-12. [Known Issues & Improvements](#known-issues--improvements)
+3. [Circuit Diagram](#circuit-diagram)
+4. [Chassis Construction](#chassis-construction)
+5. [Wiring Guide](#wiring-guide)
+6. [Arduino Code](#arduino-code)
+7. [Bluetooth App Setup](#bluetooth-app-setup)
+8. [Command Reference](#command-reference)
+9. [How It Works](#how-it-works)
+10. [Photos](#photos)
+11. [Known Issues & Improvements](#known-issues--improvements)
 
 ---
 
 ## Overview
 
-This project is a rear-wheel-drive RC car controlled over Bluetooth via a smartphone app. The front axle is steered by a servo motor, the rear wheels are driven by two DC motors through an L298N motor driver, and a 16x2 I2C LCD displays animated "eyes" that look in the direction the car is turning. The whole body is custom-built from cardboard and foam board.
+This project is a rear-wheel-drive RC car controlled over Bluetooth via a smartphone app avalible in the playstore called "BT-Car-controller". The front axle is steered by a servo motor, the rear wheels are driven by two DC motors through an L298N motor driver, and a 16x2 I2C LCD displays animated "eyes" that look in the direction the car is turning. The whole body is custom-built from cardboard and foam board.
 
 ---
 
@@ -52,12 +51,12 @@ This project is a rear-wheel-drive RC car controlled over Bluetooth via a smartp
 | L298N Motor Driver | 1 | Dual H-bridge |
 | SG90 / MG90S Servo Motor | 1 | Front axle steering |
 | TT DC Gear Motors | 2 | Rear wheels |
-| Yellow TT Wheels (65mm) | 4 | Two rear driven, two front steered |
+| Yellow TT Wheels (65mm) | 2 | Two rear driven, two front steered |
 | 16×2 I2C LCD Display | 1 | Address 0x27 |
 | IRFZ44N MOSFET | 1 | Main power switch for motor supply |
 | 1N4007 Diode | 1 | Flyback protection on MOSFET gate |
 | 18650 Li-ion Cells (3.7V) | 2 | Series → 7.4V for motors |
-| AA Battery Holder (4×) | 1 | 6V for Arduino + servo |
+| AA Battery Holder (4×1.5V) | 1 | 6V for Arduino + servo |
 | White LEDs | 2 | Headlights |
 | LED Strip / Extra LEDs | 1 | Cool lights |
 | 2kΩ Resistor | 1 | HC-05 RX voltage divider |
@@ -79,44 +78,44 @@ This project is a rear-wheel-drive RC car controlled over Bluetooth via a smartp
 |---|---|
 | D2 (RX) | HC-05 TX |
 | D3 (TX) | HC-05 RX (via 2kΩ/1kΩ voltage divider) |
-| D4 | Headlight LEDs (+ resistor to GND) |
+| D4 | Headlight LEDs |
 | D5 | Servo signal wire |
 | D6 | Cool lights |
-| D8 | L298N IN1 |
-| D9 | L298N IN2 |
-| D10 | L298N IN3 |
-| D11 | L298N IN4 |
+| D8 | L298N IN4 |
+| D9 | L298N IN3|
+| D10 | L298N IN2 |
+| D11 | L298N IN1 |
 | A4 (SDA) | LCD SDA |
 | A5 (SCL) | LCD SCL |
-| 5V | HC-05 VCC, LCD VCC, Servo VCC |
+| 5V | HC-05 VCC, LCD VCC, Servo VCC (L298N Vout) |
 | GND | Common ground |
 
 **Power notes:**
-- The two 18650 cells in series provide ~7.4V to the L298N motor driver `Vin`.
-- Four AA batteries (6V) power the Arduino `Vin` and the servo.
-- An IRFZ44N MOSFET with a 1N4007 diode acts as the main power switch for the motor supply line.
+- The two Lithum Ion cells in series provide ~7.4V to the L298N motor driver,IRFZ44(turning it on) and the Arduino Uno.
+- Four AA batteries (4x1.5V = 6V) power the Arduino LCD only.
+- An IRFZ44N MOSFET with a 1N4007 diode acts as the main supply for the LCd screen, the diode helps to reduce the 6V to a tolerable 5.3  for the LCD Screen.
 - The HC-05 RX pin is 3.3V tolerant, so a voltage divider (2kΩ + 1kΩ) is used on the Arduino TX → HC-05 RX line to step 5V down to ~3.3V.
 
 ---
 
 ## Chassis Construction
 
-The entire chassis and body is made from **corrugated cardboard and foam board**, cut and hot-glued together.
+The entire chassis and body is made from **corrugated cardboard and foam board**, cut and glued together.
 
-### Base Plate
-1. Cut a rectangular cardboard base (~25cm × 15cm).
+### Base Plate (the body is completely ur preference, you can use a base kit base bboard if you want, just hardware will be same)
+1. Cut a rectangular cardboard base ().
 2. Attach the two rear TT motors to the back corners using cardboard brackets and hot glue. Make sure the motor shafts face outward symmetrically.
-3. Mount the front axle assembly (servo + linkage rod + two front wheels) at the front. The servo rotates a crossbar that pushes/pulls the front wheel spindles to steer.
+3. Mount the front axle assembly (servo + linkage rod + two front wheels) at the front. The servo rotates a crossbar that pushes/pulls the front wheel spindles to steer.(this part is probabl0y the most trickest in the entire project, if you can 3d print a axle system, which i believe you can find in youtube or something, then do that)
 
 ### Front Steering Axle
 The front axle uses a simple Ackermann-inspired setup:
 - A servo is mounted centrally pointing sideways.
 - The servo horn connects via a rigid wire/rod to a front axle beam.
 - The front wheels are mounted on small spindles that pivot on the ends of the beam.
-- Servo position 55° = straight, 30° = right, 80° = left.
+- Servo position 55° = straight, 30° = right, 80° = left. (the orientation might change depending on how you place it, so get a understanding of where the 0 of the servo is)
 
 ### Electronics Mounting
-- Arduino Uno is hot-glued flat onto the base plate center.
+- Arduino Uno is placed flat onto the base plate center.
 - L298N motor driver sits next to the rear motors (see inside photo).
 - Battery holders are placed for weight balance.
 - LCD is mounted on the front face of the body, visible through a cut-out window.
@@ -140,7 +139,7 @@ L298N IN3  →  Arduino D10
 L298N IN4  →  Arduino D11
 L298N Vin  →  7.4V battery (+)
 L298N GND  →  Common GND
-L298N Vout →  Not used (onboard 5V regulator disabled if motor V > 7V)
+L298N Vout →  Servo VCC
 Motor A    →  Rear Left Motor
 Motor B    →  Rear Right Motor
 ```
@@ -156,14 +155,14 @@ HC-05 RX     →  Arduino D3 via voltage divider
 
 ### Servo
 ```
-Servo VCC     →  5V
+Servo VCC     →  5V (from L298N Vout)
 Servo GND     →  GND
 Servo Signal  →  Arduino D5
 ```
 
 ### LCD (I2C)
 ```
-LCD VCC  →  5V
+LCD VCC  →  5.3V (from the diode and the 6V coming from the mosfet)
 LCD GND  →  GND
 LCD SDA  →  Arduino A4
 LCD SCL  →  Arduino A5
@@ -185,7 +184,7 @@ The project code lives in `main_code_trail1.ino`. It combines everything (motor 
 
 Install these via the Arduino Library Manager (`Sketch → Include Library → Manage Libraries`):
 
-- `LiquidCrystal I2C` by Frank de Brabander
+- `LiquidCrystal I2C` by Frank de Brabander (provided in the repository)
 - `Servo` (built-in)
 - `SoftwareSerial` (built-in)
 - `Wire` (built-in)
@@ -211,11 +210,12 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 4. Click **Upload**.
 5. Disconnect the HC-05 RX/TX wires before uploading (they share the serial port and will cause upload errors if connected).
 
+Note: You can test out of the components work how they are intended by running the programs for each on them separately with the respective components connected.
 ---
 
 ## Bluetooth App Setup
 
-Use any Android Bluetooth serial terminal app. A popular free option is **"Bluetooth RC Controller"** or **"Serial Bluetooth Terminal"** (available on the Play Store).
+Use any Android Bluetooth serial terminal app. A popular free option that i used is **"BT Car Controller"** (available on the Play Store).
 
 ### Pairing the HC-05
 1. Power on the car.
@@ -225,7 +225,7 @@ Use any Android Bluetooth serial terminal app. A popular free option is **"Bluet
 ### App Configuration
 If using a generic serial terminal app, send the single-character commands listed in the Command Reference below, terminated with a newline (`\n`).
 
-If using "Bluetooth RC Controller" app, configure the buttons to send the matching single letters.
+If using "Bt Car Controller" app, configure the buttons to send the matching single letters.
 
 ---
 
@@ -276,14 +276,13 @@ The motors are power-hungry, so they run on a dedicated 7.4V Li-ion pack through
 
 | Inside (no body) | Chassis with electronics |
 |---|---|
-| ![Inside](inside2.jpeg) | ![Without chassis](withoutchassie.jpeg) |
+| ![Inside](inside1.jpeg) | ![Without chassis](withoutchassie.jpeg) |
 
 ---
 
 ## Known Issues & Improvements
 
 - **No PWM speed control** — The car runs at full speed only. Adding `analogWrite` to the enable pins of the L298N would allow variable speed.
-- **No reverse steering while moving** — Currently, steering only works as intended while moving forward. Backward steering directions are swapped logically.
 - **Cardboard durability** — The chassis is fragile. A future version could use a printed or laser-cut acrylic base.
 - **Battery life** — Two 18650 cells drain quickly under load. Consider a larger capacity pack or LiPo.
 - **No battery level indicator** — Adding a voltage divider on an analog pin and displaying voltage on the LCD would be a great addition.
@@ -294,6 +293,8 @@ The motors are power-hungry, so they run on a dedicated 7.4V Li-ion pack through
 ## License
 
 MIT License — feel free to use, modify, and build on this project. If you make something cool, share it!
+
+This project is over when you ideas run out theres still 100s of things you can do/add to this - Stay Creative
 
 ---
 
