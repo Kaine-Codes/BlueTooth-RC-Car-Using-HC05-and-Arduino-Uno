@@ -10,15 +10,16 @@
 
 1. [Overview](#overview)
 2. [Features](#features)
-3. [Circuit Diagram](#circuit-diagram)
-4. [Chassis Construction](#chassis-construction)
-5. [Wiring Guide](#wiring-guide)
-6. [Arduino Code](#arduino-code)
-7. [Bluetooth App Setup](#bluetooth-app-setup)
-8. [Command Reference](#command-reference)
-9. [How It Works](#how-it-works)
-10. [Photos](#photos)
-11. [Known Issues & Improvements](#known-issues--improvements)
+3. [Components Required](#Components)
+4. [Circuit Diagram](#circuit-diagram)
+5. [Chassis Construction](#chassis-construction)
+6. [Wiring Guide](#wiring-guide)
+7. [Arduino Code](#arduino-code)
+8. [Bluetooth App Setup](#bluetooth-app-setup)
+9. [Command Reference](#command-reference)
+10. [How It Works](#how-it-works)
+11. [Photos](#photos)
+12. [Known Issues & Improvements](#known-issues--improvements)
 
 ---
 
@@ -42,7 +43,7 @@ This project is a rear-wheel-drive RC car controlled over Bluetooth via a smartp
 
 ---
 
-## Components & Bill of Materials
+## Components Required
 
 | Component | Quantity | Notes |
 |---|---|---|
@@ -274,9 +275,9 @@ The motors are power-hungry, so they run on a dedicated 7.4V Li-ion pack through
 
 ## Photos
 
-| Inside (no body) | Chassis with electronics |
+| Inside (with body) |  no chassis, with electronics |
 |---|---|
-| ![Inside](inside1.jpeg) | ![Without chassis](withoutchassie.jpeg) |
+| ![With Chassis](inside1.jpeg) | ![Without chassis](withoutchassie.jpeg) |
 
 ---
 
