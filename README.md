@@ -10,7 +10,7 @@
 
 1. [Overview](#overview)
 2. [Features](#features)
-3. [Components Required](#Components)
+3. [Components Required](#Components-Required)
 4. [Circuit Diagram](#circuit-diagram)
 5. [Chassis Construction](#chassis-construction)
 6. [Wiring Guide](#wiring-guide)
@@ -80,8 +80,8 @@ This project is a rear-wheel-drive RC car controlled over Bluetooth via a smartp
 | D2 (RX) | HC-05 TX |
 | D3 (TX) | HC-05 RX (via 2kΩ/1kΩ voltage divider) |
 | D4 | Headlight LEDs |
-| D5 | Servo signal wire |
-| D6 | Cool lights |
+| D5 | Servo control wire |
+| D6 | Cool lights (optional)|
 | D8 | L298N IN4 |
 | D9 | L298N IN3|
 | D10 | L298N IN2 |
@@ -94,7 +94,7 @@ This project is a rear-wheel-drive RC car controlled over Bluetooth via a smartp
 **Power notes:**
 - The two Lithum Ion cells in series provide ~7.4V to the L298N motor driver,IRFZ44(turning it on) and the Arduino Uno.
 - Four AA batteries (4x1.5V = 6V) power the Arduino LCD only.
-- An IRFZ44N MOSFET with a 1N4007 diode acts as the main supply for the LCd screen, the diode helps to reduce the 6V to a tolerable 5.3  for the LCD Screen.
+- An IRFZ44N MOSFET with a 1N4007 diode acts as the main supply for the LCd screen, the diode helps to reduce the 6V to a tolerable 5.3 for the LCD Screen.
 - The HC-05 RX pin is 3.3V tolerant, so a voltage divider (2kΩ + 1kΩ) is used on the Arduino TX → HC-05 RX line to step 5V down to ~3.3V.
 
 ---
@@ -103,17 +103,17 @@ This project is a rear-wheel-drive RC car controlled over Bluetooth via a smartp
 
 The entire chassis and body is made from **corrugated cardboard and foam board**, cut and glued together.
 
-### Base Plate (the body is completely ur preference, you can use a base kit base bboard if you want, just hardware will be same)
-1. Cut a rectangular cardboard base ().
-2. Attach the two rear TT motors to the back corners using cardboard brackets and hot glue. Make sure the motor shafts face outward symmetrically.
-3. Mount the front axle assembly (servo + linkage rod + two front wheels) at the front. The servo rotates a crossbar that pushes/pulls the front wheel spindles to steer.(this part is probabl0y the most trickest in the entire project, if you can 3d print a axle system, which i believe you can find in youtube or something, then do that)
+### Base Plate (the body is completely ur preference, you can use a generic base bboard from a kit if you want, just note that the hardware will be same)
+1. Cut a rectangular cardboard base (dimensions are ur wish, just note that the components should fit right inside).
+2. Attach the two rear TT motors to the back corners using cardboard brackets/ziptie and hot glue. Make sure the motor shafts face outward symmetrically.
+3. Mount the front axle assembly (servo + linkage rod + two front wheels) at the front. The servo rotates a crossbar that pushes/pulls the front wheel spindles to steer.(this part is probabl0y the most trickest in the entire project, if you can 3d print a axle system, which i believe you can find 3d model for in youtube or something, then do that )
 
 ### Front Steering Axle
 The front axle uses a simple Ackermann-inspired setup:
 - A servo is mounted centrally pointing sideways.
 - The servo horn connects via a rigid wire/rod to a front axle beam.
 - The front wheels are mounted on small spindles that pivot on the ends of the beam.
-- Servo position 55° = straight, 30° = right, 80° = left. (the orientation might change depending on how you place it, so get a understanding of where the 0 of the servo is)
+- Servo position 55° = straight, 30° = right, 80° = left. (the orientation might change depending on how you place it, so get a understanding of where the 0 of the servo is by running the sketch called steering_part)
 
 ### Electronics Mounting
 - Arduino Uno is placed flat onto the base plate center.
@@ -134,15 +134,17 @@ The outer body is built from foam board / cardboard panels hot-glued into a boxy
 
 ### Motor Driver (L298N)
 ```
-L298N IN1  →  Arduino D8
-L298N IN2  →  Arduino D9
-L298N IN3  →  Arduino D10
-L298N IN4  →  Arduino D11
+L298N IN4  →  Arduino D8
+L298N IN3  →  Arduino D9
+L298N IN2  →  Arduino D10
+L298N IN1  →  Arduino D11
 L298N Vin  →  7.4V battery (+)
 L298N GND  →  Common GND
 L298N Vout →  Servo VCC
 Motor A    →  Rear Left Motor
 Motor B    →  Rear Right Motor
+
+Note: place a capacitor(0.1uF) on both terminals (for both left and right side). this is to solve the back EMF issue that arises when we start/stop the motor suddenly
 ```
 
 ### HC-05 Bluetooth
@@ -189,6 +191,7 @@ Install these via the Arduino Library Manager (`Sketch → Include Library → M
 - `Servo` (built-in)
 - `SoftwareSerial` (built-in)
 - `Wire` (built-in)
+make sure to include the library in the IDE : sketch-> include library-> include Zip file 
 
 ### Key Pin Definitions (in the sketch)
 
